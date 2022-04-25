@@ -1,23 +1,29 @@
-// Spaceship prefab
-class Spaceship extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame, pointValue) {
+class Zombie extends Phaser.GameObjects.Sprite
+{
+    constructor(scene, x, y, texture, frame, pointValue)
+    {
         super(scene, x, y, texture, frame);
-        scene.add.existing(this);   // add to existing scene
-        this.points = pointValue;   // store pointValue
-        this.moveSpeed = game.settings.spaceshipSpeed;         // pixels per frame
+
+        // add object to existing scene
+        scene.add.existing(this);
+
+        // store pointValue
+        this.points = pointValue;
     }
 
-    update() {
+    update(speed)
+    {
         // move spaceship left
-        this.y += this.moveSpeed;
-        // wrap around from left edge to right edge
-        if(this.y >= 500) {
-            this.reset();
-        }
+        this.y += (speed * game.settings.spaceshipSpeed);
+
+        // wraparound from left to right edge
+        if(this.y >= game.config.height){
+            this.y = 0;
+        }  
     }
 
-    // position reset
-    reset() {
+    reset()
+    {
         this.y = 0;
     }
 }
