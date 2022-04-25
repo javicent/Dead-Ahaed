@@ -14,7 +14,7 @@ class Zombie extends Phaser.GameObjects.Sprite
     update(speed)
     {
         // move spaceship left
-        this.y += (speed * game.settings.spaceshipSpeed);
+        this.y += (speed * game.settings.zombieSpeed);
 
         // wraparound from left to right edge
         if(this.y >= game.config.height){
