@@ -55,7 +55,7 @@ class Play extends Phaser.Scene
         //----------------------------------------------------------------------
         // add in the game objects
         // add player (p1)
-        this.player = new Rocket
+        this.player = new Player
         (
             this, // scene
             game.config.width/2, // x-coord
