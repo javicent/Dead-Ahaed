@@ -64,16 +64,34 @@ class Play extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
 
+        // initialize score
+        this.p1Lives = 30;
+
+        // display score
+        let livesConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+        this.scoreRight = this.add.text(game.config.width/1.5 - borderPadding + 50, borderUISize + borderPadding*2, this.p1Lives, livesConfig);
+
         // GAME OVER flag
         this.gameOver = false;
 
         // 60-second play clock
-        scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
-            this.gameOver = true;
-        }, null, this);
+        // scoreConfig.fixedWidth = 0;
+        // this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+        //     this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+        //     this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+        //     this.gameOver = true;
+        // }, null, this);
     }
 
     update() {
@@ -112,6 +130,7 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship04)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship04);
+            
         }
     }
 
@@ -143,5 +162,13 @@ class Play extends Phaser.Scene {
         this.scoreLeft.text = this.p1Score; 
         
         this.sound.play('sfx_explosion');
-      }
+
+        // subtract lives
+        this.p1Lives -= 1;
+        this.scoreRight.text = this.p1Lives;
+
+        if (this.p1Lives = 0) {
+            this.gameOver = true;
+        }
+      } 
 }
