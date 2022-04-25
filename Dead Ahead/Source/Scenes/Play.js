@@ -317,7 +317,6 @@ class Play extends Phaser.Scene
         // update the high score if needed
         
         this.scoreLeft.text = "Score: " + this.p1Score;
-        this.sound.play("sfx_explosion");
 
         this.p1Lives -= 1;
         this.lives.text = "Lives: " + this.p1Lives;
