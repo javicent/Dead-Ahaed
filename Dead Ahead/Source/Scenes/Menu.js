@@ -45,7 +45,7 @@ class Menu extends Phaser.Scene
         (
             centerX, // x-coord
             centerY - textSpacer, // y-coord
-            "DEAD AHEAD", // initial text to be displayed
+            "Dead Ahead", // initial text to be displayed
             menuConfig // configuration object
         ).setOrigin(0.5);
 
@@ -56,7 +56,7 @@ class Menu extends Phaser.Scene
         (
             centerX,
             centerY,
-            "Move with arrow keys",
+            "Move with mouse and LEFT Click to fire",
             menuConfig
         ).setOrigin(0.5);
         menuConfig.backgroundColor = "#00C080"; // set object property
@@ -86,9 +86,9 @@ class Menu extends Phaser.Scene
             // configuration settings for easy mode
             game.settings =
             {
-                spaceshipSpeed: 3,
-                fastshipSpeed: 4,
-                gameTimer: 720000
+                zombieSpeed: 3,
+                fastzombieSpeed: 4,
+                gameTimer: 600000
             }
             this.sound.play("sfx_select");
             //this.sound.stop("bgm");
@@ -100,8 +100,8 @@ class Menu extends Phaser.Scene
         {
             game.settings =
             {
-                spaceshipSpeed: 4,
-                fastshipSpeed: 5,
+                zombieSpeed: 3,
+                fastzombieSpeed: 4,
                 gameTimer: 45000
             }
             this.sound.play("sfx_select");
