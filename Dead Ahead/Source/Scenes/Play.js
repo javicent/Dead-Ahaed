@@ -174,16 +174,16 @@ class Play extends Phaser.Scene
             "Time: " + this.formatTime(this.gameClock), // text to display
             gameClockConfig // text style config object
         );
-        // add the event to decrement the clock
+        // add the event to increment the clock
         // code adapted from:
         //  https://phaser.discourse.group/t/countdown-timer/2471/3
         this.timedEvent = this.time.addEvent
         (
             {
-                delay: 5000,
+                delay: 7500,
                 callback: () =>
                 {
-                    this.gameClock += 30000; 
+                    this.gameClock += 15000; 
                     this.timeLeft.text = "Time: " +
                         this.formatTime(this.gameClock);
                 },
