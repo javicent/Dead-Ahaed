@@ -45,7 +45,7 @@ class Menu extends Phaser.Scene
         (
             centerX, // x-coord
             centerY - textSpacer, // y-coord
-            "ROCKET PATROL", // initial text to be displayed
+            "DEAD AHEAD", // initial text to be displayed
             menuConfig // configuration object
         ).setOrigin(0.5);
 
@@ -56,7 +56,7 @@ class Menu extends Phaser.Scene
         (
             centerX,
             centerY,
-            "Move with mouse and LEFT Click to fire",
+            "Move with arrow keys",
             menuConfig
         ).setOrigin(0.5);
         menuConfig.backgroundColor = "#00C080"; // set object property
