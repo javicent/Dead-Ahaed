@@ -1,60 +1,116 @@
-class Menu extends Phaser.Scene {
-    constructor() {
+class Menu extends Phaser.Scene
+{
+    constructor()
+    {
         super("menuScene");
     }
 
-    preload() {
-        // load audio
-        this.load.audio('sfx_select', './assets/blip_select12.wav');
-        this.load.audio('sfx_explosion', './assets/explosion38.wav');
-        this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
-    }
+    //--------------------------------------------------------------------------
+    // PRELOAD
+    //--------------------------------------------------------------------------
+    preload()
+    {
+        // load audio files
+        this.load.audio("sfx_select", "./Assets/blip_select12.wav");
+        this.load.audio("sfx_explosion", "./Assets/explosion38.wav");
+        this.load.audio("sfx_rocket", "./Assets/rocket_shot.wav");
+        this.load.audio('bgm', './Assets/bgm.wav');
+//        this.menu = this.sound.add("bgm");
 
-    create() {
-        // menu text configuration
-        let menuConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
+    }
+    //-end preload()------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // CREATE
+    //--------------------------------------------------------------------------
+    create()
+    {
+
+        // menu display configuration
+        let menuConfig =
+        {
+            fontFamily: "Courier",
+            fontSize: "28px",
+            backgroundColor: "#f3b141",
+            color: "#843605",
+            align: "right",
+            padding: {top: 5, bottom: 5},
             fixedWidth: 0
-        }
-        
+        };
+
+        // meny text positioning
+        let centerX = game.config.width/2;
+        let centerY = game.config.height/2;
+        let textSpacer = 64;
+
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'DEAD AHEAD', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move', menuConfig).setOrigin(0.5);
-        menuConfig.backgroundColor = '#00FF00';
-        menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+        this.add.text
+        (
+            centerX, // x-coord
+            centerY - textSpacer, // y-coord
+            "ROCKET PATROL", // initial text to be displayed
+            menuConfig // configuration object
+        ).setOrigin(0.5);
 
-        // define keys
+        // meny music plays
+    //    this.sound.play("bgm");
+
+        this.add.text
+        (
+            centerX,
+            centerY,
+            "Move with mouse and LEFT Click to fire",
+            menuConfig
+        ).setOrigin(0.5);
+        menuConfig.backgroundColor = "#00C080"; // set object property
+        menuConfig.color = "#000000";
+        this.add.text
+        (
+            centerX,
+            centerY + textSpacer,
+            "Press (E) for Easy or (H) for Hard",
+            menuConfig
+        ).setOrigin(0.5);
+        
+        // define input keys
+        keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        keyH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        
     }
+    //-end create()-------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // UPDATE
+    //--------------------------------------------------------------------------
+    update()
+    {
+        if(Phaser.Input.Keyboard.JustDown(keyE))
+        {
+            // configuration settings for easy mode
+            game.settings =
+            {
+                spaceshipSpeed: 3,
+                fastshipSpeed: 4,
+                gameTimer: 720000
+            }
+            this.sound.play("sfx_select");
+            //this.sound.stop("bgm");
+            this.scene.start("playScene");
+        }
 
-    update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-          // Novice mode
-          game.settings = {
-            spaceshipSpeed: 3,
-            gameTimer: 60000    
-          }
-          this.sound.play('sfx_select');
-          this.scene.start("playScene");    
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-          // Expert mode
-          game.settings = {
-            spaceshipSpeed: 4,
-            gameTimer: 45000    
-          }
-          this.sound.play('sfx_select');
-          this.scene.start("playScene");    
-        }
-      }
+        // configuration settings for hard mode
+        if(Phaser.Input.Keyboard.JustDown(keyH))
+        {
+            game.settings =
+            {
+                spaceshipSpeed: 4,
+                fastshipSpeed: 5,
+                gameTimer: 45000
+            }
+            this.sound.play("sfx_select");
+            //this.sound.stop("bgm");
+            this.scene.start("playScene");
+        } 
+    }
 }
+//-end update()-----------------------------------------------------------------
+
