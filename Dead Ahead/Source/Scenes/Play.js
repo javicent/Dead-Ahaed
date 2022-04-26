@@ -42,13 +42,6 @@ class Play extends Phaser.Scene
             0, 0, 640, 480, 'road'
         ).setOrigin(0, 0);
 
-
-        // place white rectangle borders
-/*        this.add.rectangle(5, 5, 630, 32, 0xffffff).setOrigin(0, 0);
-        this.add.rectangle(5, 443, 630, 32, 0xffffff).setOrigin(0, 0);
-        this.add.rectangle(5, 5, 32, 455, 0xffffff).setOrigin(0, 0);
-        this.add.rectangle(603, 5, 32, 455, 0xffffff).setOrigin(0, 0);
-*/
         // green UI background
         this.add.rectangle(37, 42, 566, 64, 0x00ff00).setOrigin(0, 0);
 
@@ -61,40 +54,46 @@ class Play extends Phaser.Scene
             game.config.width/2, // x-coord
             400, // y-coord
             "car", // texture
-            0 // frame
+            0, // frame
+            0 //time
         ).setScale(0.5, 0.5).setOrigin(0, 0);
 
-        //m is multiplier on how far zombie 2 is from zombie 1. Useful if we are moving roads
+        // m is multiplier on how far zombie 2 is from zombie 1. Useful if we are moving roads
         var m = 81;
- 
+        // min/max value on zombie spawns
+        var min = -50;
+        var max = -1000;
         // add zombie 1
         this.zombie1 = new Zombie
-        (this, 107, 0, 'zombie', 0, 10).setOrigin(0, 0);
+        (this, 107, -50, 'zombie', Phaser.Math.Between(min, max), 10).setOrigin(0, 0);
 
         // add zombie 2
         this.zombie2 = new Zombie
-        (this, this.zombie1.x + m, 0, 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie1.x + m, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
 
         // add zombie 3
         this.zombie3 = new Zombie
-        (this, this.zombie1.x + m*2, 0, 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie1.x + m*2, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
 
         this.zombie4 = new Zombie
-        (this, this.zombie1.x + m*3, 0, 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie1.x + m*3, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
 
         this.zombie5 = new Zombie
-        (this, this.zombie1.x + m*4, 0, 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie1.x + m*4, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
 
         this.zombie6 = new Zombie
-        (this, this.zombie1.x + m*5, 0, 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie1.x + m*5, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
 
         //----------------------------------------------------------------------
         // add the user input
         // define mouse controls
         //mouse = this.input;
-        // define keyboard key M
+        // define keyboard keys
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
@@ -143,8 +142,7 @@ class Play extends Phaser.Scene
             "Score: " + this.p1Score, // initial text
             scoreConfig // config settings
         );
-
-        this.p1Lives = 5;
+        this.p1Lives = game.settings.playerSpeed;
         this.lives = this.add.text
         (
             225, // x-coord
@@ -155,6 +153,8 @@ class Play extends Phaser.Scene
 
         // this timer will indicate how much longer until player reaches checkpoint
         this.gameClock = game.settings.gameTimer;
+        this.ampm = game.settings.apm;
+        
         // create an object to populate the text configuration members
         let gameClockConfig =
         {
@@ -164,14 +164,14 @@ class Play extends Phaser.Scene
             color: "#843605",
             align: "left",
             padding: {top: 5, bottom: 5},
-            fixedWidth: 140
+            fixedWidth: 200
         };
         // add the text to the screen
         this.timeLeft = this.add.text
         (
             400, // x-coord
             54, // y-coord
-            "Time: " + this.formatTime(this.gameClock), // text to display
+            "Time: " + this.formatTime(this.gameClock) + this.ampm, // text to display
             gameClockConfig // text style config object
         );
         // add the event to increment the clock
@@ -184,8 +184,7 @@ class Play extends Phaser.Scene
                 callback: () =>
                 {
                     this.gameClock += 15000; 
-                    this.timeLeft.text = "Time: " +
-                        this.formatTime(this.gameClock);
+                    this.timeLeft.text = "Time: " + this.formatTime(this.gameClock) + this.ampm;
                 },
                 scope: this,
                 loop: true
@@ -195,6 +194,8 @@ class Play extends Phaser.Scene
         //----------------------------------------------------------------------
         // game over event
         this.gameOver = false;
+        // checkpoint event
+        this.checkpoint = false;
         // 60s play clock
         scoreConfig.fixedWidth = 0;
     }
@@ -223,26 +224,35 @@ class Play extends Phaser.Scene
         if(!this.gameOver)
         {
             // update tile sprite
-            this.road.tilePositionY -= 4;  
+            this.road.tilePositionY -= this.p1Lives;  
             // update player
-            this.player.update();
+            this.player.update(this.p1Lives);
             // update zombie 1
-            this.zombie1.update(1); //parameter 1 is default speed factor
+            this.zombie1.update(1, this.p1Lives); //parameter 1 is default speed factor
             // update zombie 2
-            this.zombie2.update(1);
+            this.zombie2.update(1, this.p1Lives);
             // update zombie 3
-            this.zombie3.update(1);
+            this.zombie3.update(1, this.p1Lives);
             // update zombie 4
-            this.zombie4.update(1); 
+            this.zombie4.update(1, this.p1Lives); 
             // update zombie 5
-            this.zombie5.update(1);
+            this.zombie5.update(1, this.p1Lives);
             // update zombie 6
-            this.zombie6.update(1);
+            this.zombie6.update(1, this.p1Lives);
             
+            //switches clock from AM to PM
             if(this.gameClock >= 780000){
+                if(this.ampm == 'pm'){
+                    this.ampm = 'am'
+                }
+                if(this.ampm == 'am'){
+                    this.ampm = 'pm'
+                }
                 this.gameClock = 60000;
-                this.timeLeft.text = "Time: " +
-                        this.formatTime(this.gameClock);
+                this.timeLeft.text = "Time: " + this.formatTime(this.gameClock) + this.ampm;
+            }
+            if (this.gameClock >= 36000 & this.ampm == 'am') {
+                this.gameOver = true;
             }
         }
 
@@ -293,24 +303,20 @@ class Play extends Phaser.Scene
         // simple AABB bounds checking
         if
         (
-            player.x < zombie.x + zombie.width &&
-            player.x + player.width > zombie.x &&
+            player.x - 0 < zombie.x + zombie.width && // left side hitbox
+            player.x - 26 + player.width > zombie.x && //right side hitbox
             player.y < zombie.y + zombie.height &&
             player.height + player.y > zombie.y
         ) return true;
 
         else return false;
     }
-    //-end checkCollision(player, zombie)-----------------------------------------
-    //--------------------------------------------------------------------------
-    // EXPLOSION
-    //--------------------------------------------------------------------------
+
     zombieKill(zombie)
     {
         zombie.alpha = 0; // set zombie to be fully transparent
-
-                zombie.reset(); // reset zombie position
-                zombie.alpha = 1; // set zombie to be fully visible
+        zombie.y = Phaser.Math.Between(-50, -1000); // reset zombie position
+        zombie.alpha = 1; // set zombie to be fully visible
 
         // score increment and repaint
         this.p1Score += zombie.points;
@@ -325,12 +331,8 @@ class Play extends Phaser.Scene
             this.gameOver = true;
         }
     }
-    //-end zombieKill(zombie)----------------------------------------------------
-    //--------------------------------------------------------------------------
-    // FORMAT TIME
-    //--------------------------------------------------------------------------
-    // code adapted from:
-    //  https://phaser.discourse.group/t/countdown-timer/2471/3
+
+
     formatTime(ms)
     {
         let s = ms/1000;
@@ -339,7 +341,5 @@ class Play extends Phaser.Scene
         seconds = seconds.toString().padStart(2, "0");
         return `${min}:${seconds}`;
     }
-    //-end formatTime-----------------------------------------------------------
 }
-// end class Play
 

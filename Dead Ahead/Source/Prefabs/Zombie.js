@@ -11,19 +11,22 @@ class Zombie extends Phaser.GameObjects.Sprite
         this.points = pointValue;
     }
 
-    update(speed)
+    update(speed, playerSpeed)
     {
         // move spaceship left
-        this.y += (speed * game.settings.zombieSpeed);
+        this.y += (speed * playerSpeed);
 
         // wraparound from left to right edge
         if(this.y >= game.config.height){
-            this.y = 0;
+            // min/max value on zombie spawns
+            var min = -50;
+            var max = -1000;
+            this.y = Phaser.Math.Between(min, max);
         }  
     }
 
     reset()
     {
-        this.y = 0;
+        this.y = -50;
     }
 }

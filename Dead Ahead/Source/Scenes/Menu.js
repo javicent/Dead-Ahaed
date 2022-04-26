@@ -56,7 +56,7 @@ class Menu extends Phaser.Scene
         (
             centerX,
             centerY,
-            "Move with mouse and LEFT Click to fire",
+            "Move with A and D or Arrows",
             menuConfig
         ).setOrigin(0.5);
         menuConfig.backgroundColor = "#00C080"; // set object property
@@ -65,14 +65,12 @@ class Menu extends Phaser.Scene
         (
             centerX,
             centerY + textSpacer,
-            "Press (E) for Easy or (H) for Hard",
+            "Press Space to start",
             menuConfig
         ).setOrigin(0.5);
         
         // define input keys
-        keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-        keyH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         
     }
     //-end create()-------------------------------------------------------------
@@ -81,33 +79,20 @@ class Menu extends Phaser.Scene
     //--------------------------------------------------------------------------
     update()
     {
-        if(Phaser.Input.Keyboard.JustDown(keyE))
+        if(Phaser.Input.Keyboard.JustDown(keySPACE))
         {
             // configuration settings for easy mode
             game.settings =
             {
-                zombieSpeed: 3,
+                playerSpeed: 4,
                 fastzombieSpeed: 4,
-                gameTimer: 600000
+                gameTimer: 600000,
+                apm: 'pm'
             }
             this.sound.play("sfx_select");
             //this.sound.stop("bgm");
             this.scene.start("playScene");
         }
-
-        // configuration settings for hard mode
-        if(Phaser.Input.Keyboard.JustDown(keyH))
-        {
-            game.settings =
-            {
-                zombieSpeed: 3,
-                fastzombieSpeed: 4,
-                gameTimer: 45000
-            }
-            this.sound.play("sfx_select");
-            //this.sound.stop("bgm");
-            this.scene.start("playScene");
-        } 
     }
 }
 //-end update()-----------------------------------------------------------------

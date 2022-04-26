@@ -1,6 +1,6 @@
 class Player extends Phaser.GameObjects.Sprite
 {
-    constructor(scene, x, y, texture, frame)
+    constructor(scene, x, y, texture, frame, time)
     {
         super(scene, x, y, texture, frame);
 
@@ -13,13 +13,12 @@ class Player extends Phaser.GameObjects.Sprite
     }
 
 
-    update()
+    update(speed)
     {
-        // left/right movement
-        if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
-            this.x -= this.moveSpeed;
-        } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
-            this.x += this.moveSpeed;
+        if(keyA.isDown || keyLEFT.isDown && this.x >= 88) {  // left movement
+            this.x -= speed*(4/5);
+        } else if (keyD.isDown || keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width - 28) {  //right movement
+            this.x += speed*(4/5);
         }
     }
 
