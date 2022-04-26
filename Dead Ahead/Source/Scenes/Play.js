@@ -55,7 +55,6 @@ class Play extends Phaser.Scene
             400, // y-coord
             "car", // texture
             0, // frame
-            0 //time
         ).setScale(0.5, 0.5).setOrigin(0, 0);
 
         // m is multiplier on how far zombie 2 is from zombie 1. Useful if we are moving roads
@@ -142,6 +141,7 @@ class Play extends Phaser.Scene
             "Score: " + this.p1Score, // initial text
             scoreConfig // config settings
         );
+
         this.p1Lives = game.settings.playerSpeed;
         this.lives = this.add.text
         (
@@ -190,7 +190,23 @@ class Play extends Phaser.Scene
                 loop: true
             }
         );
+        
+        this.gasTimer = game.settings.gasTimer;
+        this.gas = game.settings.gas;
 
+        this.gasTime = this.time.addEvent
+        (
+            {
+                delay: 1000,
+                callback: () =>
+                {
+                    this.gasTimer++;
+                    console.count("player time is " + this.gas);
+                },
+                scope: this,
+                loop: true
+            }
+        );
         //----------------------------------------------------------------------
         // game over event
         this.gameOver = false;
@@ -256,6 +272,11 @@ class Play extends Phaser.Scene
             }
         }
 
+        // if a player avoids zombies for 15 seconds, they consume gas
+        if(this.gasTimer == 2){
+            this.consumeGas(this.player);
+        }
+
         // check for collisions
         if(this.checkCollision(this.player, this.zombie1))
         {
@@ -314,6 +335,7 @@ class Play extends Phaser.Scene
 
     zombieKill(zombie)
     {
+        this.gasTimer = 0;
         zombie.alpha = 0; // set zombie to be fully transparent
         zombie.y = Phaser.Math.Between(-50, -1000); // reset zombie position
         zombie.alpha = 1; // set zombie to be fully visible
@@ -332,6 +354,15 @@ class Play extends Phaser.Scene
         }
     }
 
+    consumeGas(player){
+        this.gasTimer = 0;
+        this.gas--;
+        this.p1Lives += 2;
+        this.lives.text = "Lives: " + this.p1Lives;
+        if(this.gas <= 0){
+            this.gameOver = true;
+        }
+    }
 
     formatTime(ms)
     {
