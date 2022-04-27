@@ -15,12 +15,33 @@ class Play extends Phaser.Scene
         this.load.image('road', './assets/road-long.png');
         this.load.image('hud', './assets/hud.png');
 
+        // rpm meter
         this.load.image('rpm0', './assets/rpm/dial-rpm00.png');
         this.load.image('rpm1', './assets/rpm/dial-rpm01.png');
         this.load.image('rpm2', './assets/rpm/dial-rpm02.png');
         this.load.image('rpm3', './assets/rpm/dial-rpm03.png');
         this.load.image('rpm4', './assets/rpm/dial-rpm04.png');
         this.load.image('rpm5', './assets/rpm/dial-rpm05.png');
+
+        // mph meter
+        this.load.image('mph0', './assets/mph/dial-mph00.png');
+        this.load.image('mph1', './assets/mph/dial-mph01.png');
+        this.load.image('mph2', './assets/mph/dial-mph02.png');
+        this.load.image('mph3', './assets/mph/dial-mph03.png');
+        this.load.image('mph4', './assets/mph/dial-mph04.png');
+        this.load.image('mph5', './assets/mph/dial-mph05.png');
+        this.load.image('mph6', './assets/mph/dial-mph06.png');
+        this.load.image('mph7', './assets/mph/dial-mph07.png');
+        this.load.image('mph8', './assets/mph/dial-mph08.png');
+        this.load.image('mph9', './assets/mph/dial-mph09.png');
+        this.load.image('mph10', './assets/mph/dial-mph10.png');
+
+        // gas meter
+        this.load.image('gas1', './assets/gas/dial-gas01.png');
+        this.load.image('gas2', './assets/gas/dial-gas02.png');
+        this.load.image('gas3', './assets/gas/dial-gas03.png');
+        this.load.image('gas4', './assets/gas/dial-gas04.png');
+        this.load.image('gas5', './assets/gas/dial-gas05.png');
 
         // load spritesheet for death animation
         this.load.spritesheet
@@ -53,9 +74,8 @@ class Play extends Phaser.Scene
         this.hud = this.add.image(game.config.width/2, game.config.height/1.345, 'hud');
 
         this.rpm = this.add.image(game.config.width/2, game.config.height - 54, 'rpm0');
-
-        // green UI background
-        this.add.rectangle(37, 42, 566, 64, 0x00ff00).setOrigin(0, 0);
+        this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph0');
+        this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas1');
 
         //----------------------------------------------------------------------
         // add in the game objects
@@ -67,6 +87,7 @@ class Play extends Phaser.Scene
             game.config.height/1.45, // y-coord
             "car", // texture
             0, // frame
+            10,
         ).setScale(0.5, 0.5).setOrigin(0, 0);
 
         // m is multiplier on how far zombie 2 is from zombie 1. Useful if we are moving roads
@@ -141,7 +162,7 @@ class Play extends Phaser.Scene
             fontFamily: "Courier",
             fontSize: "20px",
             backgroundColor: "#03938c",
-            color: "#843605",
+            color: "#FFFFFF",
             align: "left",
             padding: {top: 5, bottom: 5},
             fixedWidth: 150
@@ -150,18 +171,11 @@ class Play extends Phaser.Scene
         (
             game.config.width/2 + 15, // x-coord
             game.config.height - 27, // y-coord
-            "Points: " + this.p1Score, // initial text
+            "$" + this.p1Score, // initial text
             scoreConfig // config settings
         );
 
         this.p1Lives = game.settings.playerSpeed;
-        this.lives = this.add.text
-        (
-            225, // x-coord
-            54, // y coord
-            "Lives: " + this.p1Lives, // initial text
-            scoreConfig // config settings
-        );
 
         // this timer will indicate how much longer until player reaches checkpoint
         this.gameClock = game.settings.gameTimer;
@@ -173,7 +187,7 @@ class Play extends Phaser.Scene
             fontFamily: "Courier",
             fontSize: "20px",
             backgroundColor: "#03938c",
-            color: "#843605",
+            color: "#FFFFFF",
             align: "left",
             padding: {top: 5, bottom: 5},
             fixedWidth: 90
@@ -220,13 +234,6 @@ class Play extends Phaser.Scene
             }
         );
 
-        this.gasMeter = this.add.text
-        (
-            225, // x-coord
-            80, // y coord
-            "Gas: " + this.gas, // initial text
-            scoreConfig // config settings
-        );
         //----------------------------------------------------------------------
         // game over event
         this.gameOver = false;
@@ -248,7 +255,7 @@ class Play extends Phaser.Scene
         if(this.gameOver) {
             this.time.removeAllEvents();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER').setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu').setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or M to Menu').setOrigin(0.5);
         }
 
         // check for key input to restart
@@ -320,6 +327,60 @@ class Play extends Phaser.Scene
             this.consumeGas(this.player);
         }
 
+        // mph indicator
+        if(this.p1Lives == "0"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph0');
+        } else if(this.p1Lives == "1"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph1');
+        } else if(this.p1Lives == "2"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph2');
+        } else if(this.p1Lives == "3"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph3');
+        } else if(this.p1Lives == "4"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph4');
+        } else if(this.p1Lives == "5"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph5');
+        } else if(this.p1Lives == "6"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph6');
+        } else if(this.p1Lives == "7"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph7');
+        } else if(this.p1Lives == "8"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph8');
+        } else if(this.p1Lives == "9"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph9');
+        } else if(this.p1Lives == "10"){
+            this.mph.destroy();
+            this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph10');
+        }
+
+        // gas indicator
+        if(this.gas <= 0){
+            this.gasDial.destroy();
+            this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas1');
+        } else if(this.gas <= 2){
+            this.gasDial.destroy();
+            this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas2');
+        } else if(this.gas <= 4){
+            this.gasDial.destroy();
+            this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas3');
+        } else if(this.gas <= 6){
+            this.gasDial.destroy();
+            this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas4');
+        } else if(this.gas >= 8){
+            this.gasDial.destroy();
+            this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas5');
+        }
+
         // check for collisions
         if(this.checkCollision(this.player, this.zombie1))
         {
@@ -387,10 +448,9 @@ class Play extends Phaser.Scene
         this.p1Score += zombie.points;
         // update the high score if needed
         
-        this.scoreLeft.text = "Points: " + this.p1Score;
+        this.scoreLeft.text = "$" + this.p1Score;
 
         this.p1Lives -= 1;
-        this.lives.text = "Lives: " + this.p1Lives;
 
         if (this.p1Lives <= 0) {
             this.gameOver = true;
@@ -402,8 +462,6 @@ class Play extends Phaser.Scene
         this.gas -= 0.5;
         this.gasMeter = this.gas;
         this.p1Lives += 1;
-        this.lives.text = "Lives: " + this.p1Lives;
-        this.gasMeter = "Gas: " + this.gas
         if(this.gas <= 0){
             this.gameOver = true;
         }

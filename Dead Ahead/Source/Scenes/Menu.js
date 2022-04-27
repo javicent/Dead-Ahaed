@@ -88,7 +88,7 @@ class Menu extends Phaser.Scene
                 fastzombieSpeed: 4,
                 gameTimer: 600000,                
                 gasTimer: 0,
-                gas: 10,
+                gas: 8,
                 apm: 'pm',
             }
             this.sound.play("sfx_select");

@@ -22,7 +22,7 @@ game.settings =
     fastzombieSpeed: 4,
     gameTimer: 6000,
     gasTimer: 0,
-    gas: 10,
+    gas: 8,
     apm: 'pm',
 };
 
