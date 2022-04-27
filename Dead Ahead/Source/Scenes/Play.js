@@ -208,11 +208,11 @@ class Play extends Phaser.Scene
             }
         );
 
-        this.gas = this.add.text
+        this.gasMeter = this.add.text
         (
             225, // x-coord
             80, // y coord
-            "Gas: " + this.gasTimer, // initial text
+            "Gas: " + this.gas, // initial text
             scoreConfig // config settings
         );
         //----------------------------------------------------------------------
@@ -369,6 +369,7 @@ class Play extends Phaser.Scene
     consumeGas(player){
         this.gasTimer = 0;
         this.gas--;
+        this.gasMeter = this.gas;
         this.p1Lives += 2;
         this.lives.text = "Lives: " + this.p1Lives;
         if(this.gas <= 0){
