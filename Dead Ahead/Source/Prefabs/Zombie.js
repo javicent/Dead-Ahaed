@@ -15,9 +15,9 @@ class Zombie extends Phaser.GameObjects.Sprite
     {
         // move spaceship left
         this.y += (speed * playerSpeed);
-
+        
         // wraparound from left to right edge
-        if(this.y >= game.config.height){
+        if(this.y >= game.config.height-150){
             // min/max value on zombie spawns
             var min = -50;
             var max = -1000;
@@ -28,5 +28,13 @@ class Zombie extends Phaser.GameObjects.Sprite
     reset()
     {
         this.y = -50;
+    }
+    formatTime(ms)
+    {
+        let s = ms/1000;
+        let min = Math.floor(s/60);
+        let seconds = s%60;
+        seconds = seconds.toString().padStart(2, "0");
+        return `${min}:${seconds}`;
     }
 }

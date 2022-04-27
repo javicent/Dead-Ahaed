@@ -15,9 +15,9 @@ class Player extends Phaser.GameObjects.Sprite
 
     update(speed)
     {
-        if(keyA.isDown && this.x >= 88|| keyLEFT.isDown && this.x >= 88) {  // left movement
+        if(keyA.isDown && this.x >= game.config.width/2 - 316 || keyLEFT.isDown && this.x >= game.config.width/2 - 316) {  // left movement
             this.x -= speed*(4/5);
-        } else if (keyD.isDown && this.x <= game.config.width - borderUISize - this.width - 28 || keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width - 28) {  //right movement
+        } else if (keyD.isDown && this.x <= game.config.width/2 + 259 || keyRIGHT.isDown && this.x <= game.config.width/2 + 259) {  //right movement
             this.x += speed*(4/5);
         }
     }
@@ -26,7 +26,7 @@ class Player extends Phaser.GameObjects.Sprite
     reset()
     {
         this.isFiring = false;
-        this.y = 400;
+        this.y = game.config.height/1.45;
     }
 }
 
