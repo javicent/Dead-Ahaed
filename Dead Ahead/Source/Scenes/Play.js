@@ -207,6 +207,14 @@ class Play extends Phaser.Scene
                 loop: true
             }
         );
+
+        this.gas = this.add.text
+        (
+            225, // x-coord
+            80, // y coord
+            "Gas: " + this.gasTimer, // initial text
+            scoreConfig // config settings
+        );
         //----------------------------------------------------------------------
         // game over event
         this.gameOver = false;
