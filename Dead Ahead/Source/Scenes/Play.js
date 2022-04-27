@@ -225,7 +225,11 @@ class Play extends Phaser.Scene
         // generally updates every frame
 
         // when game is over remove the game clock event
-        if(this.gameOver) this.time.removeAllEvents();
+        if(this.gameOver) {
+            this.time.removeAllEvents();
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER').setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← to Menu').setOrigin(0.5);
+        }
 
         // check for key input to restart
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR))
