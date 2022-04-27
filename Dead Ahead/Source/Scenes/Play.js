@@ -273,7 +273,7 @@ class Play extends Phaser.Scene
         }
 
         // if a player avoids zombies for 15 seconds, they consume gas
-        if(this.gasTimer == 2){
+        if(this.gasTimer == 15){
             this.consumeGas(this.player);
         }
 

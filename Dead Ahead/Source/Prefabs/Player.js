@@ -15,9 +15,9 @@ class Player extends Phaser.GameObjects.Sprite
 
     update(speed)
     {
-        if(keyA.isDown || keyLEFT.isDown && this.x >= 88) {  // left movement
+        if(keyA.isDown && this.x >= 88|| keyLEFT.isDown && this.x >= 88) {  // left movement
             this.x -= speed*(4/5);
-        } else if (keyD.isDown || keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width - 28) {  //right movement
+        } else if (keyD.isDown && this.x <= game.config.width - borderUISize - this.width - 28 || keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width - 28) {  //right movement
             this.x += speed*(4/5);
         }
     }
