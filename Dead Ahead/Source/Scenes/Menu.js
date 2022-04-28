@@ -86,7 +86,7 @@ class Menu extends Phaser.Scene
             {
                 playerSpeed: 4,
                 fastzombieSpeed: 4,
-                gameTimer: 600000,                
+                gameTimer: 1320000,                
                 gasTimer: 0,
                 gas: 8,
                 apm: 'pm',

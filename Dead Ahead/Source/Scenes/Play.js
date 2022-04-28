@@ -97,24 +97,24 @@ class Play extends Phaser.Scene
         var max = -1000;
         // add zombie 1
         this.zombie1 = new Zombie
-        (this, game.config.width/2 - 259, -50, 'zombie', Phaser.Math.Between(min, max), 10).setOrigin(0, 0);
+        (this, game.config.width/2 - 259, -50, 'zombie', Phaser.Math.Between(min, max), 20).setOrigin(0, 0);
 
         // add zombie 2
         this.zombie2 = new Zombie
-        (this, this.zombie1.x + m, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie1.x + m, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
 
         // add zombie 3
         this.zombie3 = new Zombie
-        (this, this.zombie1.x + m*2, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie1.x + m*2, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
 
         this.zombie4 = new Zombie
-        (this, game.config.width/2 + 41, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
+        (this, game.config.width/2 + 41, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
 
         this.zombie5 = new Zombie
-        (this, this.zombie4.x + m, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie4.x + m, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
 
         this.zombie6 = new Zombie
-        (this, this.zombie4.x + m*2, Phaser.Math.Between(min, max), 'zombie', 0, 10).setOrigin(0, 0);
+        (this, this.zombie4.x + m*2, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
 
         //----------------------------------------------------------------------
         // add the user input
@@ -188,16 +188,16 @@ class Play extends Phaser.Scene
             fontSize: "20px",
             backgroundColor: "#03938c",
             color: "#FFFFFF",
-            align: "left",
+            align: "right",
             padding: {top: 5, bottom: 5},
-            fixedWidth: 90
+            fixedWidth: 70
         };
         // add the text to the screen
         this.timeLeft = this.add.text
         (
-            game.config.width/2 + 105, // x-coord
+            game.config.width/2 + 125, // x-coord
             game.config.height - 80, // y-coord
-            this.formatTime(this.gameClock) + this.ampm, // text to display
+            this.formatTime(this.gameClock), // text to display
             gameClockConfig // text style config object
         );
         // add the event to increment the clock
@@ -206,11 +206,11 @@ class Play extends Phaser.Scene
         this.timedEvent = this.time.addEvent
         (
             {
-                delay: 7500,
+                delay: 7500, //default 7500 (7.5 seconds)
                 callback: () =>
                 {
                     this.gameClock += 15000; 
-                    this.timeLeft.text = this.formatTime(this.gameClock) + this.ampm;
+                    this.timeLeft.text = this.formatTime(this.gameClock);
                 },
                 scope: this,
                 loop: true
@@ -288,7 +288,7 @@ class Play extends Phaser.Scene
             this.zombie6.update(1, this.p1Lives);
             
             //switches clock from AM to PM
-            if(this.gameClock >= 780000){
+            if(this.gameClock >= 1500000){
                 if(this.ampm == 'pm'){
                     this.ampm = 'am'
                 }
@@ -296,9 +296,9 @@ class Play extends Phaser.Scene
                     this.ampm = 'pm'
                 }
                 this.gameClock = 60000;
-                this.timeLeft.text = this.formatTime(this.gameClock) + this.ampm;
+                this.timeLeft.text = this.formatTime(this.gameClock);
             }
-            if (this.gameClock >= 36000 & this.ampm == 'am') {
+            if (this.gameClock == 360000) {
                 this.gameOver = true;
             }
         }
@@ -358,7 +358,7 @@ class Play extends Phaser.Scene
         } else if(this.p1Lives == "9"){
             this.mph.destroy();
             this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph9');
-        } else if(this.p1Lives == "10"){
+        } else if(this.p1Lives >= "10"){
             this.mph.destroy();
             this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph10');
         }
@@ -459,8 +459,14 @@ class Play extends Phaser.Scene
 
     consumeGas(player){
         this.gasTimer = 0;
-        this.gas -= 0.5;
-        this.gasMeter = this.gas;
+        this.p1Score -= 10;
+        if(this.p1Score < 0){
+            this.p1Score += 10;
+            this.gas -= 0.5;
+            this.gasMeter = this.gas;
+        } else {
+            this.scoreLeft.text = "$" + this.p1Score;
+        }
         this.p1Lives += 1;
         if(this.gas <= 0){
             this.gameOver = true;
