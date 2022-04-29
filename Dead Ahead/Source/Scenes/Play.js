@@ -11,9 +11,16 @@ class Play extends Phaser.Scene
     {
         // load images/tile sprites
         this.load.image('car', './assets/car.png');
-        this.load.image('zombie', './assets/zombie.png');
         this.load.image('road', './assets/road-long.png');
         this.load.image('hud', './assets/hud.png');
+
+        // zombies
+        this.load.image('zombie', './assets/zombie.png');
+
+        // obstacles
+        this.load.image('roadblock1', './assets/obstacles/bigRoadblock.png');
+        this.load.image('obstacle1', './assets/obstacles/obstacle01.png');
+        this.load.image('obstacle2', './assets/obstacles/obstacle02.png');
 
         // rpm meter
         this.load.image('rpm0', './assets/rpm/dial-rpm00.png');
@@ -77,6 +84,8 @@ class Play extends Phaser.Scene
         this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph0');
         this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas1');
 
+        this.arpm = ['rpm0','rpm1','rpm2','rpm3','rpm4','rpm5']
+        this.amph = ['mph0','mph1','mph2','mph3','mph4','mph5','mph6','mph7','mph8','mph9','mph10']
         //----------------------------------------------------------------------
         // add in the game objects
         // add player (p1)
@@ -90,31 +99,61 @@ class Play extends Phaser.Scene
             10,
         ).setScale(0.5, 0.5).setOrigin(0, 0);
 
+        // array of obstacles and zombies
+        this.obstacles = [];
+        this.zombies = [];
+
         // m is multiplier on how far zombie 2 is from zombie 1. Useful if we are moving roads
         var m = 93;
         // min/max value on zombie spawns
         var min = -50;
         var max = -1000;
+        // min/max on debris spawns
+        this.omin = game.config.width/2 - 316; // max left
+        this.omax = game.config.width/2 + 235; // max right
+
+        var num = 4;
+        for(var i = 0; i <= num; i++){
+
+        }
+
+        // add obstacle 1
+        this.obstacle1 = new Obstacle
+        (this, Phaser.Math.Between(this.omin, this.omax - 105), Phaser.Math.Between(min, max), 'roadblock1', 0).setOrigin(0, 0);
+        this.obstacles.push(this.obstacle1);
+        // add obstacle 2
+        this.obstacle2 = new Obstacle
+        (this, Phaser.Math.Between(this.omin, this.omax - 105), Phaser.Math.Between(min, max), 'obstacle1', 0).setOrigin(0, 0);
+        this.obstacles.push(this.obstacle2);
+        // add obstacle 3
+        this.obstacle3 = new Obstacle
+        (this, Phaser.Math.Between(this.omin, this.omax - 105), Phaser.Math.Between(min, max), 'obstacle2', 0).setOrigin(0, 0);
+        this.obstacles.push(this.obstacle3);        
+        
         // add zombie 1
         this.zombie1 = new Zombie
-        (this, game.config.width/2 - 259, -50, 'zombie', Phaser.Math.Between(min, max), 20).setOrigin(0, 0);
-
+        (this, game.config.width/2 - 259, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
+        this.zombies.push(this.zombie1);
         // add zombie 2
         this.zombie2 = new Zombie
         (this, this.zombie1.x + m, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
-
+        this.zombies.push(this.zombie2);
         // add zombie 3
         this.zombie3 = new Zombie
         (this, this.zombie1.x + m*2, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
+        this.zombies.push(this.zombie3);
 
         this.zombie4 = new Zombie
         (this, game.config.width/2 + 41, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
+        this.zombies.push(this.zombie4);
 
         this.zombie5 = new Zombie
         (this, this.zombie4.x + m, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
+        this.zombies.push(this.zombie5);
 
         this.zombie6 = new Zombie
         (this, this.zombie4.x + m*2, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
+        this.zombies.push(this.zombie6);
 
         //----------------------------------------------------------------------
         // add the user input
@@ -227,7 +266,6 @@ class Play extends Phaser.Scene
                 callback: () =>
                 {
                     this.gasTimer++;
-                    console.count("player time is " + this.gas);
                 },
                 scope: this,
                 loop: true
@@ -250,7 +288,6 @@ class Play extends Phaser.Scene
     {
         
         // generally updates every frame
-        console.count(this.gas);
         // when game is over remove the game clock event
         if(this.gameOver) {
             this.time.removeAllEvents();
@@ -274,19 +311,33 @@ class Play extends Phaser.Scene
             this.road.tilePositionY -= this.p1Lives;  
             // update player
             this.player.update(this.p1Lives);
-            // update zombie 1
-            this.zombie1.update(1, this.p1Lives); //parameter 1 is default speed factor
-            // update zombie 2
-            this.zombie2.update(1, this.p1Lives);
-            // update zombie 3
-            this.zombie3.update(1, this.p1Lives);
-            // update zombie 4
-            this.zombie4.update(1, this.p1Lives); 
-            // update zombie 5
-            this.zombie5.update(1, this.p1Lives);
-            // update zombie 6
-            this.zombie6.update(1, this.p1Lives);
-            
+
+            // update zombies
+            for(var i = 0; i < this.zombies.length; i++){
+                this.zombies[i].update(1, this.p1Lives);
+            }
+            // update obstacles
+            for(var i = 0; i < this.obstacles.length; i++){
+                this.obstacles[i].update(this.p1Lives, this.omin, this.omax);
+            }
+
+            // check zombie collisions
+            for(var i = 0; i < this.zombies.length; i++){
+                if(this.checkCollision(this.player, this.zombies[i]))
+                {
+                    this.player.reset();
+                    this.zombieKill(this.zombies[i]);
+                }        
+            }
+            // check obstacle collisions
+            for(var i = 0; i < this.obstacles.length; i++){
+                if(this.checkCollision(this.player, this.obstacles[i]))
+                {
+                    this.player.reset();
+                    this.obstacleDestroy(this.obstacles[i]);
+                }        
+            }
+        
             //switches clock from AM to PM
             if(this.gameClock >= 1500000){
                 if(this.ampm == 'pm'){
@@ -302,6 +353,7 @@ class Play extends Phaser.Scene
                 this.gameOver = true;
             }
         }
+        
         // rpm indicator
         if(this.gasTimer == "0"){
             this.rpm.destroy();
@@ -380,43 +432,6 @@ class Play extends Phaser.Scene
             this.gasDial.destroy();
             this.gasDial = this.add.image(game.config.width/2, game.config.height - 54, 'gas5');
         }
-
-        // check for collisions
-        if(this.checkCollision(this.player, this.zombie1))
-        {
-            this.player.reset();
-            this.zombieKill(this.zombie1);
-        }
-
-        if(this.checkCollision(this.player, this.zombie2))
-        {
-            this.player.reset();
-            this.zombieKill(this.zombie2);
-        }
-
-        if(this.checkCollision(this.player, this.zombie3))
-        {
-            this.player.reset();
-            this.zombieKill(this.zombie3);
-        }
-
-        if(this.checkCollision(this.player, this.zombie4))
-        {
-            this.player.reset();
-            this.zombieKill(this.zombie4);
-        }
-
-        if(this.checkCollision(this.player, this.zombie5))
-        {
-            this.player.reset();
-            this.zombieKill(this.zombie5);
-        }
-
-        if(this.checkCollision(this.player, this.zombie6))
-        {
-            this.player.reset();
-            this.zombieKill(this.zombie6);
-        }
     }
     //-end update()-------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -456,13 +471,26 @@ class Play extends Phaser.Scene
             this.gameOver = true;
         }
     }
+    
+    obstacleDestroy(obstacle)
+    {
+        this.gasTimer = 0;
+        obstacle.alpha = 0; // set obstacle to be fully transparent
+        obstacle.y = Phaser.Math.Between(-50, -1000); // reset position
+        obstacle.alpha = 1; // set obstacle to be fully visible
+        this.p1Lives -= 2;
+
+        if (this.p1Lives <= 0) {
+            this.gameOver = true;
+        }
+    }
 
     consumeGas(player){
         this.gasTimer = 0;
         this.p1Score -= 10;
         if(this.p1Score < 0){
             this.p1Score += 10;
-            this.gas -= 0.5;
+            this.gas -= 1;
             this.gasMeter = this.gas;
         } else {
             this.scoreLeft.text = "$" + this.p1Score;
@@ -481,4 +509,7 @@ class Play extends Phaser.Scene
         seconds = seconds.toString().padStart(2, "0");
         return `${min}:${seconds}`;
     }
+
+    
+
 }
