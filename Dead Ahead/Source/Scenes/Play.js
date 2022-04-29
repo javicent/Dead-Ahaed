@@ -71,7 +71,7 @@ class Play extends Phaser.Scene
             0, 0, game.config.width, game.config.height, 'road'
         ).setOrigin(0, 0);
 
-        this.hud = this.add.image(game.config.width/2, game.config.height/1.345, 'hud');
+        this.hud = this.add.image(game.config.width/2, game.config.height - 240, 'hud');
 
         this.rpm = this.add.image(game.config.width/2, game.config.height - 54, 'rpm0');
         this.mph = this.add.image(game.config.width/2, game.config.height - 54, 'mph0');
@@ -195,13 +195,13 @@ class Play extends Phaser.Scene
         // add the text to the screen
         this.timeLeft = this.add.text
         (
-            game.config.width/2 + 125, // x-coord
-            game.config.height - 80, // y-coord
+            game.config.width/2 + 125,       // x-coord
+            game.config.height - 80,         // y-coord
             this.formatTime(this.gameClock), // text to display
             gameClockConfig // text style config object
         );
-        // add the event to increment the clock
-        // code adapted from:
+        //  add the event to increment the clock
+        //  code adapted from:
         //  https://phaser.discourse.group/t/countdown-timer/2471/3
         this.timedEvent = this.time.addEvent
         (
