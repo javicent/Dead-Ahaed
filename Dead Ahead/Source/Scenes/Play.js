@@ -37,11 +37,11 @@ class Play extends Phaser.Scene
         this.load.image('mph10', './assets/mph/dial-mph10.png');
 
         // gas meter
-        this.load.image('gas1', './assets/gas/dial-gas01.png');
-        this.load.image('gas2', './assets/gas/dial-gas02.png');
+        this.load.image('gas1', './assets/gas/dial-gas05.png');
+        this.load.image('gas2', './assets/gas/dial-gas04.png');
         this.load.image('gas3', './assets/gas/dial-gas03.png');
-        this.load.image('gas4', './assets/gas/dial-gas04.png');
-        this.load.image('gas5', './assets/gas/dial-gas05.png');
+        this.load.image('gas4', './assets/gas/dial-gas02.png');
+        this.load.image('gas5', './assets/gas/dial-gas01.png');
 
         // load spritesheet for death animation
         this.load.spritesheet
