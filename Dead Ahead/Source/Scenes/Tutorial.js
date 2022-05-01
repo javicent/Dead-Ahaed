@@ -1,8 +1,8 @@
-class Menu extends Phaser.Scene
+class Tutorial extends Phaser.Scene
 {
     constructor()
     {
-        super("menuScene");
+        super("tutorialScene");
     }
 
     //--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ class Menu extends Phaser.Scene
         (
             centerX,
             centerY + textSpacer,
-            "Press Space to tut",
+            "Press Space to start",
             menuConfig
         ).setOrigin(0.5);
         
@@ -93,7 +93,7 @@ class Menu extends Phaser.Scene
             }
             this.sound.play("sfx_select");
             //this.sound.stop("bgm");
-            this.scene.start("tutorialScene");
+            this.scene.start("playScene");
         }
     }
 }

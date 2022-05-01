@@ -6,7 +6,7 @@ let config =
     //width: 1700, //default 640
     
     height: window.innerHeight, //default 480
-    scene: [Menu, Play]
+    scene: [Menu, Tutorial, Play]
 };
 
 let game = new Phaser.Game(config); // create main game object
