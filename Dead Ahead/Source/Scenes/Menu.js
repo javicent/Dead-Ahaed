@@ -52,20 +52,20 @@ class Menu extends Phaser.Scene
         // meny music plays
     //    this.sound.play("bgm");
 
-        this.add.text
-        (
-            centerX,
-            centerY,
-            "Move with A and D or Arrows",
-            menuConfig
-        ).setOrigin(0.5);
-        menuConfig.backgroundColor = "#00C080"; // set object property
-        menuConfig.color = "#000000";
+        // this.add.text
+        // (
+        //     centerX,
+        //     centerY,
+        //     "Move with A and D or Arrows",
+        //     menuConfig
+        // ).setOrigin(0.5);
+        // menuConfig.backgroundColor = "#00C080"; // set object property
+        // menuConfig.color = "#000000";
         this.add.text
         (
             centerX,
             centerY + textSpacer,
-            "Press Space to tut",
+            "Press Space to continue",
             menuConfig
         ).setOrigin(0.5);
         

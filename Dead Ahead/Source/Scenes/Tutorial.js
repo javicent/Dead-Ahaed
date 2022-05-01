@@ -45,7 +45,7 @@ class Tutorial extends Phaser.Scene
         (
             centerX, // x-coord
             centerY - textSpacer, // y-coord
-            "Dead Ahead", // initial text to be displayed
+            "TUTORIAL", // initial text to be displayed
             tutConfig // configuration object
         ).setOrigin(0.5);
 
@@ -57,16 +57,16 @@ class Tutorial extends Phaser.Scene
             centerX,
             centerY,
             "Move with A and D or Arrows",
-            menuConfig
+            tutConfig
         ).setOrigin(0.5);
-        menuConfig.backgroundColor = "#00C080"; // set object property
-        menuConfig.color = "#000000";
+        tutConfig.backgroundColor = "#00C080"; // set object property
+        tutConfig.color = "#000000";
         this.add.text
         (
             centerX,
             centerY + textSpacer,
             "Press Space to start",
-            menuConfig
+            tutConfig
         ).setOrigin(0.5);
         
         // define input keys
