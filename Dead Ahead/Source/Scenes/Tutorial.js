@@ -24,7 +24,7 @@ class Tutorial extends Phaser.Scene
     {
 
         // menu display configuration
-        let menuConfig =
+        let tutConfig =
         {
             fontFamily: "Courier",
             fontSize: "28px",
@@ -46,7 +46,7 @@ class Tutorial extends Phaser.Scene
             centerX, // x-coord
             centerY - textSpacer, // y-coord
             "Dead Ahead", // initial text to be displayed
-            menuConfig // configuration object
+            tutConfig // configuration object
         ).setOrigin(0.5);
 
         // meny music plays
