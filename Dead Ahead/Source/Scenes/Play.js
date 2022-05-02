@@ -52,7 +52,7 @@ class Play extends Phaser.Scene
 
         // soundtracks
         this.load.audio("start1", "./Assets/bgm/start1.wav");
-        this.load.audio("go1", "./Assets/bgm/go1.wav");
+        this.load.audio("go1", "./Assets/bgm/go1.OGG");
         this.load.audio("go2", "./Assets/bgm/go2.wav");
         this.load.audio("go3", "./Assets/bgm/go3.wav");
 
@@ -266,13 +266,14 @@ class Play extends Phaser.Scene
                 delay: 7500, //default 7500 (7.5 seconds)
                 callback: () =>
                 {
-                    this.gameClock += 15000; 
+                    this.gameClock += 15000*this.tMult; 
                     this.timeLeft.text = this.formatTime(this.gameClock);
                 },
                 scope: this,
                 loop: true
             }
         );
+        this.tMult = 0;
 
         let countdownConfig =
         {
@@ -318,18 +319,25 @@ class Play extends Phaser.Scene
                 delay: 1000,
                 callback: () =>
                 {
-                    this.gasTimer++;
+                    this.gasTimer++ * this.tMult;
                 },
                 scope: this,
                 loop: true
             }
         );
 
+        // checkpoint
+        this.uGasC = 1
+        this.uGasP = 1
+        this.uArmor = 1
+        this.uKill = 1
+        this.uFill = (8 - this.gas) * (11 - this.uGasC);
+
         //----------------------------------------------------------------------
         // game over event
         this.gameOver = false;
         // checkpoint event
-        this.checkpoint = false;
+        this.checkpoint = true;
         // 60s play clock
         scoreConfig.fixedWidth = 0;
     }
@@ -339,17 +347,29 @@ class Play extends Phaser.Scene
     //--------------------------------------------------------------------------
     update()
     {
-        
         // generally updates every frame
         // starts Start timer
-        if(this.init == false){
-            if(this.start.isPlaying == false){
+        if(!this.init){
+            if(this.checkpoint){
+                var m = 20;
+                this.add.text(game.config.width/2, game.config.height/2 - 30, 'You survived the night! Press the following keys to upgrade the item').setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 60, '(G) Gas conversion: ' + this.uGasP).setOrigin(0.5);                
+                this.add.text(game.config.width/2, game.config.height/2 + 75, '(C) Gas conversion cost: ' + this.uGasC).setOrigin(0.5);                
+                this.add.text(game.config.width/2, game.config.height/2 + 90, '(A) Armor: ' + this.uArmor).setOrigin(0.5);                
+                this.add.text(game.config.width/2, game.config.height/2 + 105, '(K) Kill rewards: ' + this.uKill).setOrigin(0.5);                
+                this.add.text(game.config.width/2, game.config.height/2 + 120, '(F) Refill gas: $' + this.uFill).setOrigin(0.5);
+                //if(){
+
+                //}                
+            }
+            if(!this.start.isPlaying){
                 this.start.stop()       
                 this.init = true;
-                this.gasTimer = 0;
+                this.gasTimer -= 3;
                 this.go1.play();
                 this.cdtLeft.destroy();
                 this.cdtMult = 0;
+                this.tMult = 1;
             }            
         }
 
