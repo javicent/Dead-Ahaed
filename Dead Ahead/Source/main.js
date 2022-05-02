@@ -23,7 +23,7 @@ game.settings =
     gameTimer: 6000,
     gasTimer: 0,
     gas: 8,
-    apm: 'pm',
+    countdown: 0
 };
 
 // reserve some keyboard bindings

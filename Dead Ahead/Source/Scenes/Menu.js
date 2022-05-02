@@ -13,8 +13,10 @@ class Menu extends Phaser.Scene
         // load audio files
         this.load.audio("sfx_select", "./Assets/blip_select12.wav");
         this.load.audio("sfx_explosion", "./Assets/explosion38.wav");
-//        this.menu = this.sound.add("bgm");
-
+        
+        this.load.audio("bgm1", "./Assets/bgm/bgm1.wav");
+        this.load.audio("bgm1_loop", "./Assets/bgm/bgm1_loop.wav");
+        
     }
     //-end preload()------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -23,6 +25,7 @@ class Menu extends Phaser.Scene
     create()
     {
 
+        this.initialize1 = false;
         // menu display configuration
         let menuConfig =
         {
@@ -41,37 +44,40 @@ class Menu extends Phaser.Scene
         let textSpacer = 64;
 
         // show menu text
-        this.add.text
+        this.menu = this.add.text
         (
             centerX, // x-coord
             centerY - textSpacer, // y-coord
-            "Dead Ahead", // initial text to be displayed
+            "DEAD AHEAD", // initial text to be displayed
             menuConfig // configuration object
         ).setOrigin(0.5);
 
-        // meny music plays
-    //    this.sound.play("bgm");
+        this.menu2 = this.add.text
+        (
+            centerX,
+            centerY + textSpacer,
+            "Press (E) for Easy or (H) for Hard",
+            menuConfig
+        ).setOrigin(0.5);
 
-        // this.add.text
-        // (
-        //     centerX,
-        //     centerY,
-        //     "Move with A and D or Arrows",
-        //     menuConfig
-        // ).setOrigin(0.5);
-        // menuConfig.backgroundColor = "#00C080"; // set object property
-        // menuConfig.color = "#000000";
-        this.add.text
+        // menu music plays
+        // this.bgm1 = ['bgm1','bgm1_loop','bgm1_getReady']
+        this.music = this.sound.add('bgm1');
+        this.music.setLoop(true);
+        
+        this.cover = this.add.rectangle(0, 0, 9000, 9000, '#000021');
+        this.coverText = this.add.text
         (
             centerX,
             centerY + textSpacer,
             "Press Space to continue",
             menuConfig
         ).setOrigin(0.5);
-        
+
         // define input keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        
+        keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+        keyH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
     }
     //-end create()-------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -79,21 +85,57 @@ class Menu extends Phaser.Scene
     //--------------------------------------------------------------------------
     update()
     {
-        if(Phaser.Input.Keyboard.JustDown(keySPACE))
-        {
-            // configuration settings for easy mode
-            game.settings =
+        if(this.initialize1 == false){
+            if(Phaser.Input.Keyboard.JustDown(keySPACE))
             {
-                playerSpeed: 4,
-                fastzombieSpeed: 4,
-                gameTimer: 1320000,                
-                gasTimer: 0,
-                gas: 8,
-                apm: 'pm',
+                // this is so we force user interaction to work around google autoplay
+                this.cover.destroy();
+                this.coverText.destroy();
+                // menu music plays
+                this.music.play();
+                this.initialize1 = true;
             }
-            this.sound.play("sfx_select");
-            //this.sound.stop("bgm");
-            this.scene.start("tutorialScene");
+        }
+        if(this.initialize1 == true){
+            if(this.music.isPlaying == false){ 
+                if(this.musicLoop.isPlaying == false){
+                    this.musicLoop.play();              
+                }
+            }
+            
+            if(Phaser.Input.Keyboard.JustDown(keyE))
+            {
+                // configuration settings for easy mode
+                game.settings =
+                {
+                    playerSpeed: 4,
+                    fastzombieSpeed: 4,
+                    gameTimer: 1320000,
+                    gasTimer: 0,
+                    gas: 8,
+                    countdown: 0
+                }
+                this.sound.play("sfx_select");
+                this.music.stop();
+                this.scene.start("tutorialScene");
+            }
+    
+            // configuration settings for hard mode
+            if(Phaser.Input.Keyboard.JustDown(keyH))
+            {
+                game.settings =
+                {
+                    playerSpeed: 4,
+                    fastzombieSpeed: 4,
+                    gameTimer: 1320000,                
+                    gasTimer: 0,
+                    gas: 4,
+                    countdown: 0
+                }
+                this.sound.play("sfx_select");
+                this.music.stop();
+                this.scene.start("tutorialScene");
+            }
         }
     }
 }

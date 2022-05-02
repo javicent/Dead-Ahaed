@@ -13,8 +13,11 @@ class Tutorial extends Phaser.Scene
         // load audio files
         this.load.audio("sfx_select", "./Assets/blip_select12.wav");
         this.load.audio("sfx_explosion", "./Assets/explosion38.wav");
-//        this.menu = this.sound.add("bgm");
-
+        
+        //load bgm
+        this.load.audio("bgm1_getReady", "./Assets/bgm/bgm1_getReady.wav");
+        this.load.audio("bgm1_getReadyLoop", "./Assets/bgm/bgm1_getReadyLoop.wav");
+        this.load.audio("go1", "./Assets/bgm/go1.wav");
     }
     //-end preload()------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -69,9 +72,16 @@ class Tutorial extends Phaser.Scene
             tutConfig
         ).setOrigin(0.5);
         
+        //  initialize soundtrack
+        this.getReady = this.sound.add('bgm1_getReady')
+        this.getReady.setLoop(false);
+        this.getReadyLoop = this.sound.add('bgm1_getReadyLoop')
+        this.getReadyLoop.setLoop(true);
+        this.go = this.sound.add('go1')
+
         // define input keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        
+        this.getReady.play();   
     }
     //-end create()-------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -79,6 +89,11 @@ class Tutorial extends Phaser.Scene
     //--------------------------------------------------------------------------
     update()
     {
+        if(this.getReady.isPlaying == false){
+            if(this.getReadyLoop.isPlaying == false){
+                this.getReadyLoop.play();              
+            }
+        }
         if(Phaser.Input.Keyboard.JustDown(keySPACE))
         {
             // configuration settings for easy mode
@@ -92,7 +107,8 @@ class Tutorial extends Phaser.Scene
                 apm: 'pm',
             }
             this.sound.play("sfx_select");
-            //this.sound.stop("bgm");
+            this.getReady.stop();
+            this.getReadyLoop.stop();
             this.scene.start("playScene");
         }
     }

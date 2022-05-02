@@ -50,6 +50,12 @@ class Play extends Phaser.Scene
         this.load.image('gas4', './assets/gas/dial-gas02.png');
         this.load.image('gas5', './assets/gas/dial-gas01.png');
 
+        // soundtracks
+        this.load.audio("start1", "./Assets/bgm/start1.wav");
+        this.load.audio("go1", "./Assets/bgm/go1.wav");
+        this.load.audio("go2", "./Assets/bgm/go2.wav");
+        this.load.audio("go3", "./Assets/bgm/go3.wav");
+
         // load spritesheet for death animation
         this.load.spritesheet
         (
@@ -69,6 +75,18 @@ class Play extends Phaser.Scene
     //--------------------------------------------------------------------------
     create()
     {
+        // initializes play scene
+        this.init = false;
+
+        // load soundtracks
+        this.start = this.sound.add('start1')
+        this.go1 = this.sound.add('go1')
+        this.go2 = this.sound.add('go2')
+        this.go3 = this.sound.add('go3')
+        // detecting soundtrack loops
+        this.go1Loop = false;
+        this.go2Loop = false;
+        this.go3Loop = false;
 
         //----------------------------------------------------------------------
         // configure the user interface
@@ -255,7 +273,42 @@ class Play extends Phaser.Scene
                 loop: true
             }
         );
-        
+
+        let countdownConfig =
+        {
+            fontFamily: "Courier",
+            fontSize: "50px",
+            backgroundColor: "#03938c",
+            color: "#FFFFFF",
+            align: "center",
+            padding: {top: 30, bottom: 30},
+            fixedWidth: 500
+        };
+        this.countdown = game.settings.countdown;
+        this.countdown = 3000;
+        this.cdtLeft = this.add.text
+        (
+            game.config.width/2,       // x-coord
+            game.config.height/2,         // y-coord
+            "Get ready: " + this.formatTimeCountDown(this.countdown), // text to display
+            countdownConfig // text style config object
+        );
+        this.cdt = this.time.addEvent
+        (
+            {
+                delay: 1000, 
+                callback: () =>
+                {
+                    this.countdown -= 1000*this.cdtMult;
+                    this.cdtLeft.text = this.formatTimeCountDown(this.countdown);
+                },
+                scope: this,
+                loop: true
+            }
+        );
+        this.cdtMult = 1;
+        this.start.play();       
+
         this.gasTimer = game.settings.gasTimer;
         this.gas = game.settings.gas;
 
@@ -288,6 +341,18 @@ class Play extends Phaser.Scene
     {
         
         // generally updates every frame
+        // starts Start timer
+        if(this.init == false){
+            if(this.start.isPlaying == false){
+                this.start.stop()       
+                this.init = true;
+                this.gasTimer = 0;
+                this.go1.play();
+                this.cdtLeft.destroy();
+                this.cdtMult = 0;
+            }            
+        }
+
         // when game is over remove the game clock event
         if(this.gameOver) {
             this.time.removeAllEvents();
@@ -304,8 +369,7 @@ class Play extends Phaser.Scene
         {
             this.scene.start("menuScene");
         }
-
-        if(!this.gameOver)
+        if(!this.gameOver & this.init)
         {
             // update tile sprite
             this.road.tilePositionY -= this.p1Lives;  
@@ -509,7 +573,14 @@ class Play extends Phaser.Scene
         seconds = seconds.toString().padStart(2, "0");
         return `${min}:${seconds}`;
     }
-
+    
+    formatTimeCountDown(ms)
+    {
+        let s = ms/1000;
+        let seconds = s%60;
+        seconds = seconds.toString().padStart(2);
+        return `${seconds}`;
+    }
     
 
 }
