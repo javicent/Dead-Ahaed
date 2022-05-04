@@ -289,7 +289,7 @@ class Play extends Phaser.Scene
         this.countdown = 3000;
         this.cdtLeft = this.add.text
         (
-            game.config.width/2,       // x-coord
+            game.config.width/2 - 250,       // x-coord
             game.config.height/2,         // y-coord
             "Get ready: " + this.formatTimeCountDown(this.countdown), // text to display
             countdownConfig // text style config object
@@ -567,7 +567,7 @@ class Play extends Phaser.Scene
         
         this.scoreLeft.text = "$" + this.p1Score;
 
-//        this.p1Lives -= 1;
+        this.p1Lives -= 1;
 
         if (this.p1Lives <= 0) {
             this.gameOver = true;
@@ -580,7 +580,7 @@ class Play extends Phaser.Scene
         obstacle.alpha = 0; // set obstacle to be fully transparent
         obstacle.y = Phaser.Math.Between(-50, -1000); // reset position
         obstacle.alpha = 1; // set obstacle to be fully visible
-        //this.p1Lives -= 2;
+        this.p1Lives -= 2;
 
         if (this.p1Lives <= 0) {
             this.gameOver = true;
