@@ -18,6 +18,20 @@ class Tutorial extends Phaser.Scene
         this.load.audio("bgm1_getReady", "./Assets/bgm/bgm1_getReady.wav");
         this.load.audio("bgm1_getReadyLoop", "./Assets/bgm/bgm1_getReadyLoop.wav");
         this.load.audio("go1", "./Assets/bgm/go1.wav");
+
+        // load images/tile sprites
+        this.load.image('car', './assets/car.png');
+        this.load.image('road', './assets/road-long.png');
+        this.load.image('hud', './assets/hud.png');
+
+        // zombies
+        this.load.image('zombie', './assets/zombie.png');
+
+        // obstacles
+        this.load.image('roadblock1', './assets/obstacles/bigRoadblock.png');
+        this.load.image('obstacle1', './assets/obstacles/obstacle01.png');
+        this.load.image('obstacle2', './assets/obstacles/obstacle02.png');
+ 
     }
     //-end preload()------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -25,6 +39,22 @@ class Tutorial extends Phaser.Scene
     //--------------------------------------------------------------------------
     create()
     {
+
+        this.road = this.add.tileSprite
+        (
+            0, 0, game.config.width, game.config.height, 'road'
+        ).setOrigin(0, 0);
+
+        this.hud = this.add.image(game.config.width/2, game.config.height - 240, 'hud');
+
+        this.zombie1 = this.add.image(650, game.config.height/2 + 64*2.5, 'zombie');
+        this.zombie2 = this.add.image(625, game.config.height/2 + 64*1.5, 'zombie');
+        this.zombie3 = this.add.image(600, game.config.height/2 + 64*2.5, 'zombie');
+
+        this.ob1 = this.add.image(1500, game.config.height/2 + 64*1.5, 'roadblock1');
+        this.ob2 = this.add.image(1600, game.config.height/2 + 64*.5, 'obstacle1');
+        this.ob3 = this.add.image(1700, game.config.height/2 + 64*1.5, 'obstacle2');
+
 
         // menu display configuration
         let tutConfig =
@@ -64,10 +94,28 @@ class Tutorial extends Phaser.Scene
         ).setOrigin(0.5);
         tutConfig.backgroundColor = "#00C080"; // set object property
         tutConfig.color = "#000000";
+
         this.add.text
         (
             centerX,
             centerY + textSpacer,
+            "Try to drive as long as possible without running out of fuel or taking too much damage.",
+            tutConfig
+        ).setOrigin(0.5);
+
+        this.add.text
+        (
+            centerX,
+            centerY + textSpacer*2,
+            "Hit zombies to gain cash that can be converted into fuel.",
+            tutConfig
+        ).setOrigin(0.5);
+
+
+        this.add.text
+        (
+            centerX,
+            centerY + textSpacer*3,
             "Press Space to start",
             tutConfig
         ).setOrigin(0.5);
@@ -81,7 +129,7 @@ class Tutorial extends Phaser.Scene
 
         // define input keys
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.getReady.play();   
+        this.getReady.play();  
     }
     //-end create()-------------------------------------------------------------
     //--------------------------------------------------------------------------
