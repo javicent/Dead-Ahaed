@@ -14,6 +14,9 @@ class Play extends Phaser.Scene
         this.load.image('road', './assets/road-long.png');
         this.load.image('hud', './assets/hud.png');
 
+        // load car atlas
+        this.load.atlas('car_atlas', './assets/car-atlas.png', './assets/carmap.json');
+
         // zombies
         this.load.image('zombie', './assets/zombie.png');
 
@@ -112,10 +115,26 @@ class Play extends Phaser.Scene
             this, // scene
             game.config.width/2, // x-coord
             game.config.height/1.45, // y-coord
-            "car", // texture
+            "car_atlas", // texture
             0, // frame
             10,
         ).setScale(0.5, 0.5).setOrigin(0, 0);
+
+        // add player animations
+        this.anims.create({
+            key: 'car_anim',
+            frames: this.anims.generateFrameNames('car_atlas', {
+                prefix: 'sprite',
+                start: 1,
+                end: 6,
+                suffix: '',
+            }),
+            frameRate: 12,
+            repeat: -1,
+        });
+
+        // play animation
+        this.player.play("car_anim");
 
         // array of obstacles and zombies
         this.obstacles = [];
