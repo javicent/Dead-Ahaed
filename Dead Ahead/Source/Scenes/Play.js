@@ -337,7 +337,7 @@ class Play extends Phaser.Scene
         // game over event
         this.gameOver = false;
         // checkpoint event
-        this.checkpoint = true;
+        this.checkpoint = false;
         // 60s play clock
         scoreConfig.fixedWidth = 0;
     }
@@ -350,19 +350,7 @@ class Play extends Phaser.Scene
         // generally updates every frame
         // starts Start timer
         if(!this.init){
-            if(this.checkpoint){
-                var m = 20;
-                this.add.text(game.config.width/2, game.config.height/2 - 30, 'You survived the night! Press the following keys to upgrade the item').setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2 + 60, '(G) Gas conversion: ' + this.uGasP).setOrigin(0.5);                
-                this.add.text(game.config.width/2, game.config.height/2 + 75, '(C) Gas conversion cost: ' + this.uGasC).setOrigin(0.5);                
-                this.add.text(game.config.width/2, game.config.height/2 + 90, '(A) Armor: ' + this.uArmor).setOrigin(0.5);                
-                this.add.text(game.config.width/2, game.config.height/2 + 105, '(K) Kill rewards: ' + this.uKill).setOrigin(0.5);                
-                this.add.text(game.config.width/2, game.config.height/2 + 120, '(F) Refill gas: $' + this.uFill).setOrigin(0.5);
-                //if(){
-
-                //}                
-            }
-            if(!this.start.isPlaying){
+            if(!this.start.isPlaying & !this.checkpoint){
                 this.start.stop()       
                 this.init = true;
                 this.gasTimer -= 3;
@@ -421,6 +409,25 @@ class Play extends Phaser.Scene
                     this.obstacleDestroy(this.obstacles[i]);
                 }        
             }
+            // check if enemies overlap
+            for(var i = 0; i < this.obstacles.length; i++){
+                for(var j = 0; j < this.zombies.length; j++){
+                    if(this.checkOverlap(this.zombies[j], this.obstacles[i]))
+                    {
+                        this.zombies[i].y -= 50;
+                        console.log('boom');
+                    }        
+                }        
+            }
+            for(var i = 0; i < this.obstacles.length - 1; i++){
+                for(var j = 1; j < this.obstacles.length; j++){
+                    if(this.checkOverlap(this.obstacles[j], this.obstacles[i]))
+                    {
+                        this.obstacles[i].y -= 100;
+                        console.log('boom');
+                    }        
+                }        
+            }
         
             //switches clock from AM to PM
             if(this.gameClock >= 1500000){
@@ -432,9 +439,6 @@ class Play extends Phaser.Scene
                 }
                 this.gameClock = 60000;
                 this.timeLeft.text = this.formatTime(this.gameClock);
-            }
-            if (this.gameClock == 360000) {
-                this.gameOver = true;
             }
         }
         
@@ -536,6 +540,20 @@ class Play extends Phaser.Scene
         else return false;
     }
 
+    checkOverlap(o1, o2)
+    {
+        // simple AABB bounds checking
+        if
+        (
+            o1.x < o1.x + o2.width && // left side hitbox
+            o1.x + o1.width > o2.x && // right side hitbox
+            o1.y < o2.y + o2.height && // upper hitbox
+            o1.height + o1.y > o2.y // lower hitbox
+        ) return true;
+
+        else return false;
+    }
+
     zombieKill(zombie)
     {
         this.gasTimer = 0;
@@ -549,7 +567,7 @@ class Play extends Phaser.Scene
         
         this.scoreLeft.text = "$" + this.p1Score;
 
-        this.p1Lives -= 1;
+//        this.p1Lives -= 1;
 
         if (this.p1Lives <= 0) {
             this.gameOver = true;
@@ -562,7 +580,7 @@ class Play extends Phaser.Scene
         obstacle.alpha = 0; // set obstacle to be fully transparent
         obstacle.y = Phaser.Math.Between(-50, -1000); // reset position
         obstacle.alpha = 1; // set obstacle to be fully visible
-        this.p1Lives -= 2;
+        //this.p1Lives -= 2;
 
         if (this.p1Lives <= 0) {
             this.gameOver = true;
