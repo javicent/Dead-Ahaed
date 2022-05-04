@@ -55,7 +55,6 @@ class Tutorial extends Phaser.Scene
         this.ob2 = this.add.image(1600, game.config.height/2 + 64*.5, 'obstacle1');
         this.ob3 = this.add.image(1700, game.config.height/2 + 64*1.5, 'obstacle2');
 
-
         // menu display configuration
         let tutConfig =
         {
@@ -111,7 +110,6 @@ class Tutorial extends Phaser.Scene
             tutConfig
         ).setOrigin(0.5);
 
-
         this.add.text
         (
             centerX,
@@ -119,7 +117,52 @@ class Tutorial extends Phaser.Scene
             "Press Space to start",
             tutConfig
         ).setOrigin(0.5);
+
+
+        tutConfig.fontSize = "14px";
+        this.add.text
+        (
+            710,
+            centerY + textSpacer*5.5,
+            "Convert",
+            tutConfig
+        ).setOrigin(0.5);
+
+        this.add.text
+        (
+            800,
+            centerY + textSpacer*5.5,
+            "Speed",
+            tutConfig
+        ).setOrigin(0.5);
+
+        this.add.text
+        (
+            890,
+            centerY + textSpacer*5.5,
+            "Fuel",
+            tutConfig
+        ).setOrigin(0.5);
+
+        tutConfig.backgroundColor = "#f3b141"; // set object property
+        tutConfig.color = "#000000";
         
+        this.add.text
+        (
+            1000,
+            centerY + textSpacer*6.5,
+            "Cash",
+            tutConfig
+        ).setOrigin(0.5);
+
+        this.add.text
+        (
+            1100,
+            centerY + textSpacer*6,
+            "Time",
+            tutConfig
+        ).setOrigin(0.5);
+
         //  initialize soundtrack
         this.getReady = this.sound.add('bgm1_getReady')
         this.getReady.setLoop(false);
