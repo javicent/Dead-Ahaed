@@ -11,7 +11,7 @@ class Play extends Phaser.Scene
     {
         // load images/tile sprites
         this.load.image('car', './assets/car.png');
-        this.load.image('road', './assets/road-long.png');
+        this.load.image('road', './assets/Road-long.png');
         this.load.image('hud', './assets/hud.png');
 
         // load car atlas
