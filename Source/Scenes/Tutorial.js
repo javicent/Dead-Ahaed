@@ -20,17 +20,17 @@ class Tutorial extends Phaser.Scene
         this.load.audio("go1", "./Assets/bgm/go1.wav");
 
         // load images/tile sprites
-        this.load.image("car", "./assets/car.png");
-        this.load.image("road", "./assets/road-long.png");
-        this.load.image("hud", "./assets/hud.png");
+        this.load.image("car", "./Assets/car.png");
+        this.load.image("road", "./Assets/road-long.png");
+        this.load.image("hud", "./Assets/hud.png");
 
         // zombies
-        this.load.image("zombie", "./assets/zombie.png");
+        this.load.image("zombie", "./Assets/zombie.png");
 
         // obstacles
-        this.load.image("roadblock1", "./assets/obstacles/bigRoadblock.png");
-        this.load.image("obstacle1", "./assets/obstacles/obstacle01.png");
-        this.load.image("obstacle2", "./assets/obstacles/obstacle02.png");
+        this.load.image("roadblock1", "./Assets/obstacles/bigRoadblock.png");
+        this.load.image("obstacle1", "./Assets/obstacles/obstacle01.png");
+        this.load.image("obstacle2", "./Assets/obstacles/obstacle02.png");
  
     }
     //-end preload()------------------------------------------------------------
