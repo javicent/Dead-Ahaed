@@ -6,6 +6,12 @@ let config =
     //width: 1700, //default 640
     
     height: window.innerHeight, //default 480
+
+    // scale: {
+    //     mode: Phaser.Scale.FIT,
+    //     autoCenter: Phaser.Scale.CENTER_BOTH
+    // },
+
     scene: [Menu, Tutorial, Play]
 };
 
