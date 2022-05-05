@@ -11,11 +11,11 @@ class Play extends Phaser.Scene
     {
         // load images/tile sprites
         this.load.image("car", "./Assets/car.png");
-        this.load.image("road", "./Assets/road-long.png");
+        this.load.image("road", "./Assets/Road-long.png");
         this.load.image("hud", "./Assets/hud.png");
 
         // load car atlas
-        this.load.atlas("car_atlas", "./Assets/car-atlas.png", "./assets/carmap.json");
+        this.load.atlas("car_atlas", "./Assets/car-atlas.png", "./Assets/carmap.json");
 
         // zombies
         this.load.image("zombie", "./Assets/zombie.png");

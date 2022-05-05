@@ -21,7 +21,7 @@ class Tutorial extends Phaser.Scene
 
         // load images/tile sprites
         this.load.image("car", "./Assets/car.png");
-        this.load.image("road", "./Assets/road-long.png");
+        this.load.image("road", "./Assets/Road-long.png");
         this.load.image("hud", "./Assets/hud.png");
 
         // zombies
