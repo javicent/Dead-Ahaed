@@ -10,48 +10,48 @@ class Play extends Phaser.Scene
     preload()
     {
         // load images/tile sprites
-        this.load.image("car", "./assets/car.png");
-        this.load.image("road", "./assets/road-long.png");
-        this.load.image("hud", "./assets/hud.png");
+        this.load.image("car", "./Assets/car.png");
+        this.load.image("road", "./Assets/road-long.png");
+        this.load.image("hud", "./Assets/hud.png");
 
         // load car atlas
-        this.load.atlas("car_atlas", "./assets/car-atlas.png", "./assets/carmap.json");
+        this.load.atlas("car_atlas", "./Assets/car-atlas.png", "./assets/carmap.json");
 
         // zombies
-        this.load.image("zombie", "./assets/zombie.png");
+        this.load.image("zombie", "./Assets/zombie.png");
 
         // obstacles
-        this.load.image("roadblock1", "./assets/obstacles/bigRoadblock.png");
-        this.load.image("obstacle1", "./assets/obstacles/obstacle01.png");
-        this.load.image("obstacle2", "./assets/obstacles/obstacle02.png");
+        this.load.image("roadblock1", "./Assets/obstacles/bigRoadblock.png");
+        this.load.image("obstacle1", "./Assets/obstacles/obstacle01.png");
+        this.load.image("obstacle2", "./Assets/obstacles/obstacle02.png");
 
         // rpm meter
-        this.load.image("rpm0", "./assets/rpm/dial-rpm00.png");
-        this.load.image("rpm1", "./assets/rpm/dial-rpm01.png");
-        this.load.image("rpm2", "./assets/rpm/dial-rpm02.png");
-        this.load.image("rpm3", "./assets/rpm/dial-rpm03.png");
-        this.load.image("rpm4", "./assets/rpm/dial-rpm04.png");
-        this.load.image("rpm5", "./assets/rpm/dial-rpm05.png");
+        this.load.image("rpm0", "./Assets/rpm/dial-rpm00.png");
+        this.load.image("rpm1", "./Assets/rpm/dial-rpm01.png");
+        this.load.image("rpm2", "./Assets/rpm/dial-rpm02.png");
+        this.load.image("rpm3", "./Assets/rpm/dial-rpm03.png");
+        this.load.image("rpm4", "./Assets/rpm/dial-rpm04.png");
+        this.load.image("rpm5", "./Assets/rpm/dial-rpm05.png");
 
         // mph meter
-        this.load.image("mph0", "./assets/mph/dial-mph00.png");
-        this.load.image("mph1", "./assets/mph/dial-mph01.png");
-        this.load.image("mph2", "./assets/mph/dial-mph02.png");
-        this.load.image("mph3", "./assets/mph/dial-mph03.png");
-        this.load.image("mph4", "./assets/mph/dial-mph04.png");
-        this.load.image("mph5", "./assets/mph/dial-mph05.png");
-        this.load.image("mph6", "./assets/mph/dial-mph06.png");
-        this.load.image("mph7", "./assets/mph/dial-mph07.png");
-        this.load.image("mph8", "./assets/mph/dial-mph08.png");
-        this.load.image("mph9", "./assets/mph/dial-mph09.png");
-        this.load.image("mph10", "./assets/mph/dial-mph10.png");
+        this.load.image("mph0", "./Assets/mph/dial-mph00.png");
+        this.load.image("mph1", "./Assets/mph/dial-mph01.png");
+        this.load.image("mph2", "./Assets/mph/dial-mph02.png");
+        this.load.image("mph3", "./Assets/mph/dial-mph03.png");
+        this.load.image("mph4", "./Assets/mph/dial-mph04.png");
+        this.load.image("mph5", "./Assets/mph/dial-mph05.png");
+        this.load.image("mph6", "./Assets/mph/dial-mph06.png");
+        this.load.image("mph7", "./Assets/mph/dial-mph07.png");
+        this.load.image("mph8", "./Assets/mph/dial-mph08.png");
+        this.load.image("mph9", "./Assets/mph/dial-mph09.png");
+        this.load.image("mph10", "./Assets/mph/dial-mph10.png");
 
         // gas meter
-        this.load.image("gas1", "./assets/gas/dial-gas05.png");
-        this.load.image("gas2", "./assets/gas/dial-gas04.png");
-        this.load.image("gas3", "./assets/gas/dial-gas03.png");
-        this.load.image("gas4", "./assets/gas/dial-gas02.png");
-        this.load.image("gas5", "./assets/gas/dial-gas01.png");
+        this.load.image("gas1", "./Assets/gas/dial-gas05.png");
+        this.load.image("gas2", "./Assets/gas/dial-gas04.png");
+        this.load.image("gas3", "./Assets/gas/dial-gas03.png");
+        this.load.image("gas4", "./Assets/gas/dial-gas02.png");
+        this.load.image("gas5", "./Assets/gas/dial-gas01.png");
 
         // soundtracks
         this.load.audio("start1", "./Assets/bgm/start1.wav");
