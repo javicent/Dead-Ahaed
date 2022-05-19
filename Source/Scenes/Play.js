@@ -79,7 +79,7 @@ class Play extends Phaser.Scene
     create()
     {
         // initializes play scene
-        this.init = false;
+        this.setup = false;
 
         // load soundtracks
         this.start = this.sound.add('start1')
@@ -368,10 +368,10 @@ class Play extends Phaser.Scene
     {
         // generally updates every frame
         // starts Start timer
-        if(!this.init){
+        if(!this.setup){
             if(!this.start.isPlaying & !this.checkpoint){
                 this.start.stop()       
-                this.init = true;
+                this.setup = true;
                 this.gasTimer -= 3;
                 this.go1.play();
                 this.cdtLeft.destroy();
@@ -396,7 +396,7 @@ class Play extends Phaser.Scene
         {
             this.scene.start("menuScene");
         }
-        if(!this.gameOver & this.init)
+        if(!this.gameOver & this.setup)
         {
             // update tile sprite
             this.road.tilePositionY -= this.p1Lives;  
