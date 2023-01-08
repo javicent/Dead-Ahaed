@@ -141,7 +141,7 @@ class Play extends Phaser.Scene
         this.zombies = [];
 
         // m is multiplier on how far zombie 2 is from zombie 1. Useful if we are moving roads
-        var m = 93;
+        var m = 80;
         // min/max value on zombie spawns
         var min = -50;
         var max = -1000;
@@ -169,7 +169,7 @@ class Play extends Phaser.Scene
         
         // add zombie 1
         this.zombie1 = new Zombie
-        (this, game.config.width/2 - 259, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
+        (this, 100, Phaser.Math.Between(min, max), 'zombie', 0, 20).setOrigin(0, 0);
         this.zombies.push(this.zombie1);
         // add zombie 2
         this.zombie2 = new Zombie
